@@ -5,10 +5,12 @@ const bcrypt = require('bcryptjs');
 
 const router = express.Router();
 
+// Default endpoint
 router.get('/', (req, res) => {
     res.json('Hit api endpoint for auth');
 })
 
+// Endpoint for adding a new user 
 router.post('/add-user', [
     body('name', 'Enter a valid name').isLength({ min: 3 }),
     body('email', 'Enter a valid email').isEmail(),
