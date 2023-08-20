@@ -21,5 +21,5 @@ const UserSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model('users',UserSchema);
-User.createIndexes();
+// User.createIndexes(); // Not a good practise, as this creates an index in our db. Handling the duplicate emails would be done in the controller of the endpoint
 module.exports = User;
