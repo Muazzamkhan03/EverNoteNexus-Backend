@@ -10,7 +10,8 @@ const NoteSchema = new mongoose.Schema({
         required: true
     },
     tag: {
-        type: String
+        type: String,
+        default: 'General'
     },
     timestamp: {
         type: Date,
