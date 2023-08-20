@@ -19,8 +19,7 @@ router.post('/add-user', [
     }
     const user = User(req.body);
     user.save();
-    // res.json(req.body);
-    return res.send(`Hello, ${req.body.name}!`);
+    return res.json(user);
 });
 
 module.exports = router;
