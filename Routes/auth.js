@@ -2,13 +2,13 @@ const express = require('express');
 const User = require('../Models/User');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
 // Default endpoint
 router.get('/', (req, res) => {
-    res.json('Hit api endpoint for auth');
+    res.json('Endpoint for auth');
 })
 
 // Endpoint for adding a new user 
@@ -39,7 +39,14 @@ router.post('/add-user', [
                 email: req.body.email,
                 password: pwdHash
             });
-            return res.json(user);
+
+            const data = {
+                user: {
+                    id: user.id
+                }
+            };
+            const authToken = jwt.sign(data, process.env.JWT_SECRET);
+            return res.json({authToken});
         }
         catch (error) {
             console.log("Error: ", error);
