@@ -9,9 +9,9 @@ router.get('/', (req, res) => {
 })
 
 router.post('/add-user', [
-    body('name').isLength({ min: 3 }),
-    body('email').isEmail(),
-    body('password').isLength({ min: 8 })
+    body('name', 'Enter a valid name').isLength({ min: 3 }),
+    body('email', 'Enter a valid email').isEmail(),
+    body('password', 'Password must be atleast 8 characters long').isLength({ min: 8 })
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
