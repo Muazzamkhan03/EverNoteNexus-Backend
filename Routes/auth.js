@@ -6,12 +6,12 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-// Default endpoint
+// ROUTE 1: Default endpoint. No login required
 router.get('/', (req, res) => {
     res.json('Endpoint for auth');
 })
 
-// Endpoint for adding a new user using POST /api/auth/add-user
+// ROUTE 2:  Endpoint for adding a new user using POST /api/auth/add-user. No login required
 router.post('/add-user', [
     body('name', 'Enter a valid name').isLength({ min: 3 }),
     body('email', 'Enter a valid email').isEmail(),
@@ -55,7 +55,7 @@ router.post('/add-user', [
     });
 
 
-// Endpoint for authentication of a user using POST /api/auth/login
+// ROUTE 3:  Endpoint for authentication of a user using POST /api/auth/login. No login required
 router.post('/login', [
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password cannot be blank').exists()
@@ -98,5 +98,18 @@ router.post('/login', [
 
     });
         
+
+// ROUTE 4:  Endpoint for getting logged in user info using POST /api/auth/get-user. Login required
+router.post('/get-user', async (req, res) => {
+    try{
+        const userId = 'TODO';
+        const user = await User.findById(userId).select('-password'); //select('-password') would ensure that the password doesn't get returned in the object
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).send("Internal server error occured");
+    }
+
+});
+
         
 module.exports = router;
