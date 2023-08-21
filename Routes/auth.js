@@ -103,8 +103,10 @@ router.post('/login', [
 // ROUTE 4:  Endpoint for getting logged in user info using POST /api/auth/get-user. Login required
 router.post('/get-user', fetchUser, async (req, res) => {
     try{
-        const userId = 'TODO';
+        // The user.id is getting added by the fetchUser middleware, by decoding the jw token 
+        const userId = req.user.id;
         const user = await User.findById(userId).select('-password'); //select('-password') would ensure that the password doesn't get returned in the object
+        res.send(user);
     } catch (error) {
         console.log("Error: ", error);
         res.status(500).send("Internal server error occured");
