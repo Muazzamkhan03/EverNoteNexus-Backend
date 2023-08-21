@@ -15,4 +15,38 @@ router.get('/fetch-notes', fetchUser, async (req,res)=>{
     res.json(notes);
 });
 
+// ROUTE 3:  Endpoint for adding a new note using POST /api/notes/add-note. Login required
+router.post('/add-note', fetchUser, [
+    body('title', 'Title cannot be blank').exists(),
+    body('description', 'Description cannot be blank').exists()
+], 
+async (req, res) => {
+        // Checks for validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        // Destructuring the request body to get individual elements
+        const {title, description, tag} = req.body;
+
+        try {
+            // Creating a new note
+            let note = new Note({
+                user: req.user.id,
+                title,
+                description,
+                tag
+            });
+            // Saving the note, and sending saved note as the response
+            note = await note.save();
+            res.json(note);
+
+        } catch (error) {
+            console.log("Error: ", error);
+            res.status(500).send("Internal server error occured");
+        }
+
+    });
+
 module.exports = router;
