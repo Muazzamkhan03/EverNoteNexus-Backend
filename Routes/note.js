@@ -55,4 +55,35 @@ async (req, res) => {
 
     });
 
+// ROUTE 4:  Endpoint for updating an existing note using PUT /api/notes/update-note. Login required
+router.put('/update-note/:id',fetchUser, async (req, res)=>{
+    //Creating a new note object, that would update the existing note
+    const newNote = {};
+    if(req.body.title){newNote.title = req.body.title}
+    if(req.body.description){newNote.description = req.body.description}
+    if(req.body.tag){newNote.tag = req.body.tag}
+
+    // Checking if the note with the passed id exists 
+    let note = await Note.findById(req.params.id);
+    if(!note){
+        return res.status(404).send("Not Found");
+    }
+    
+    // Checking if the user id in the note, matches with the user id passed extracted from the fetchUser middleware 
+    if(note.user.toString() !== req.user.id){
+        return res.status(401).send("Not Allowed");
+
+    }
+
+    // Updating the note
+    try{
+        note = await Note.findByIdAndUpdate(req.params.id, {$set: newNote}, {new: true});
+        res.json(note);
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).send("Internal server error occured");
+    }
+
+});
+
 module.exports = router;
