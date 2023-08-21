@@ -1,5 +1,6 @@
 const express = require('express');
 const Note = require('../Models/Note');
+const { body, validationResult } = require('express-validator');
 const fetchUser = require('../MiddleWare/fetchUser');
 
 const router = express.Router();
@@ -11,8 +12,13 @@ router.get('/',(req,res)=>{
 
 // ROUTE 2:  Endpoint for fetching all notes using GET /api/notes/fetch-notes. Login required
 router.get('/fetch-notes', fetchUser, async (req,res)=>{
-    const notes = await Note.fetch({user: req.user.id});
-    res.json(notes);
+    try{
+        const notes = await Note.find({user: req.user.id});
+        res.json(notes);
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(500).send("Internal server error occured");
+    }
 });
 
 // ROUTE 3:  Endpoint for adding a new note using POST /api/notes/add-note. Login required
