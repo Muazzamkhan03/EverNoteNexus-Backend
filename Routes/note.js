@@ -76,7 +76,6 @@ router.put('/update-note/:id', fetchUser, async (req, res) => {
         }
 
         // Updating the note
-
         note = await Note.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true });
         res.json(note);
 
@@ -102,7 +101,7 @@ router.delete('/delete-note/:id', fetchUser, async (req, res) => {
         }
 
         // Updating the note
-        note = await Note.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true });
+        note = await Note.findByIdAndDelete(req.params.id);
         res.json({"Success": "Note has been deleted", note: note});
 
     } catch (error) {
