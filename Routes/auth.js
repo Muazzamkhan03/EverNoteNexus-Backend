@@ -80,7 +80,7 @@ router.post('/login', [
             // Matching password with the stored password hash 
             const passMatch = await bcrypt.compare(password, user.password);
             if(!passMatch){
-                return res.status(400).json({ errors: [{ error: "Incorrect credentials" }] });
+                return res.status(400).json({ success: false, errors: [{ error: "Incorrect credentials" }] });
             }
 
             // Signing the data to be returned and then sending the token to the client
@@ -90,7 +90,7 @@ router.post('/login', [
                 }
             };
             const authToken = jwt.sign(data, process.env.JWT_SECRET);
-            return res.json({ authToken });
+            return res.json({ success: true, authToken: authToken });
 
         } catch (error) {
             console.log("Error: ", error);
